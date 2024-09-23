@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -e
+
+output_dir="/tmp"
+
+rm -r $output_dir
+
+mkdir -p "$output_dir"
+
+num_files=$((RANDOM % 6 + 5))
+
+echo "== Creating $num_files random files..."
+
+for ((i=1; i<=$num_files; i++)); do
+    random_filenames="$output_dir/file_$i.txt"
+
+    dd if=/dev/urandom of="$random_filename" bs=1024 count=$((RANDOM % 1024 + 1)) 2>/dev/null
+
+    echo "== Created $random_filename"
+
+done
+
+echo "Created $num_files files"
+
+tree $output_dir
+
+# ./s3/bash-scripts/put-objectsw my-new-shiny-bucket-ab12345

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+echo "== Sync Bucket"
+
+set -e
+
+if [ -z "$1" ]; then
+    echo "There needs to be a bucket name. e.g. ./bucket my-bucket-name"
+    exit 1
+fi
+# Check for filename prefix
+if [ -z "$2" ]; then
+    echo "There needs to be a filename prefix. e.g. ./bucket my-bucket-name my-filename-prefix"
+    exit 1
+fi
+BUCKET_NAME=$1
+FILENAME_PREFIX=$2
+
+output_dir="/tmp/s3-bash-scripts"
+
+rm -r $output_dir
+
+mkdir -p $output_dir
+
+num_files=$((RANDOM % 6 + 5))
+
+echo "== Creating $num_files random files..."
+
+for ((i=1; i<=$num_files; i++)); do
+    random_filenames="$output_dir/${FILENAME_PREFIX}_$i.txt"
+
+    dd if=/dev/urandom of="$random_filenames" bs=1024 count=$((RANDOM % 1024 + 1)) 2>/dev/null
+
+    echo "== Created $random_filename"
+
+done
+
+echo "Created $num_files files"
+
+tree $output_dir
+
+aws s3 sync $output_dir s3://$BUCKET_NAME/files
+
+# ./s3/bash-scripts/sync my-new-shiny-bucket-ab12345 myfile
