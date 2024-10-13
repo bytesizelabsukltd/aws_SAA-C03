@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+echo "== create bucket via cloud formation"
+
+STACK_NAME="cloud-formation-s3-simple"
+
+aws cloudformation deploy \
+--template-file create-bucket.yaml \
+# --no-execute-changeset \
+--region eu-west-2 \
+--stack-name $STACK_NAME
